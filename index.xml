@@ -1,59 +1,51 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Home on UBIKS232</title>
-    <link>http://ubiks232.github.io/</link>
-    <description>Recent content in Home on UBIKS232</description>
+    <title>UBIKS232 BLOG</title>
+    <link>https://ubiks232.io/</link>
+    <description>Recent content on UBIKS232 BLOG</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <lastBuildDate>Wed, 14 Jun 2017 00:00:00 +0000</lastBuildDate><atom:link href="http://ubiks232.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <language>en</language>
+    <managingEditor>ubik.3141@gmail.com (UBIKS232)</managingEditor>
+    <webMaster>ubik.3141@gmail.com (UBIKS232)</webMaster>
+    <lastBuildDate>Thu, 04 Jul 2024 02:03:30 +0800</lastBuildDate><atom:link href="https://ubiks232.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Another Note on A blogdown Tutorial</title>
-      <link>http://ubiks232.github.io/note/another-note/</link>
-      <pubDate>Wed, 14 Jun 2017 00:00:00 +0000</pubDate>
+      <title>FirstPublish</title>
+      <link>https://ubiks232.io/post/firstpublish/</link>
+      <pubDate>Thu, 04 Jul 2024 02:03:30 +0800</pubDate>
+      <author>ubik.3141@gmail.com (UBIKS232)</author>
+      <guid>https://ubiks232.io/post/firstpublish/</guid>
       
-      <guid>http://ubiks232.github.io/note/another-note/</guid>
-      <description>I just discovered an awesome tutorial on blogdown written by Alison. I have to admit this is the best blogdown tutorial I have seen so far.</description>
+      <description></description>
+      
     </item>
     
     <item>
-      <title>A Quick Note on Two Beautiful Websites</title>
-      <link>http://ubiks232.github.io/note/a-quick-note/</link>
-      <pubDate>Tue, 13 Jun 2017 00:00:00 +0000</pubDate>
+      <title>About</title>
+      <link>https://ubiks232.io/about/</link>
+      <pubDate>Wed, 03 Jul 2024 00:00:00 +0000</pubDate>
+      <author>ubik.3141@gmail.com (UBIKS232)</author>
+      <guid>https://ubiks232.io/about/</guid>
       
-      <guid>http://ubiks232.github.io/note/a-quick-note/</guid>
-      <description>To me, the two most impressive websites based on blogdown are:
- Rob J Hyndman&amp;rsquo;s personal website. Live Free or Dichotomize by Lucy and Nick et al.  I&amp;rsquo;m sure there will be more.</description>
+      <description>&lt;h3 id=&#34;about-this-blog&#34;&gt;About this blog&lt;/h3&gt;
+&lt;p&gt;This is a blog about my journey in the world of technology. There will also be some thoughts that occur to me in my daily life.&lt;/p&gt;
+&lt;p&gt;I hope you could enjoy reading these materials.&lt;/p&gt;
+&lt;h3 id=&#34;about-hugo&#34;&gt;About Hugo&lt;/h3&gt;
+&lt;h5 id=&#34;by-hugo-authors&#34;&gt;by Hugo Authors&lt;/h5&gt;
+&lt;p&gt;Written in Go, Hugo is an open source static site generator available under the &lt;a href=&#34;https://github.com/gohugoio/hugo/blob/master/LICENSE&#34;&gt;Apache Licence 2.0.&lt;/a&gt; Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.&lt;/p&gt;
+</description>
+      
     </item>
     
     <item>
-      <title>A Plain Markdown Post</title>
-      <link>http://ubiks232.github.io/post/2016-02-14-hello-markdown/</link>
-      <pubDate>Sun, 14 Feb 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://ubiks232.github.io/post/2016-02-14-hello-markdown/</guid>
-      <description>This sample post is mainly for blogdown users. If you do not use blogdown, you can skip the first section.
-1. Markdown or R Markdown This is a post written in plain Markdown (*.md) instead of R Markdown (*.Rmd). The major differences are:
- You cannot run any R code in a plain Markdown document, whereas in an R Markdown document, you can embed R code chunks (```{r}); A plain Markdown post is rendered through Goldmark by default, and an R Markdown document is compiled by rmarkdown and Pandoc.</description>
-    </item>
-    
-    <item>
-      <title>Lorem Ipsum</title>
-      <link>http://ubiks232.github.io/post/2015-07-23-lorem-ipsum/</link>
-      <pubDate>Thu, 23 Jul 2015 00:00:00 +0000</pubDate>
-      
-      <guid>http://ubiks232.github.io/post/2015-07-23-lorem-ipsum/</guid>
-      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Quisque mattis volutpat lorem vitae feugiat.</description>
-    </item>
-    
-    <item>
-      <title>About Hugo XMin</title>
-      <link>http://ubiks232.github.io/about/</link>
+      <title></title>
+      <link>https://ubiks232.io/archives/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <author>ubik.3141@gmail.com (UBIKS232)</author>
+      <guid>https://ubiks232.io/archives/</guid>
       
-      <guid>http://ubiks232.github.io/about/</guid>
-      <description>XMin is the first Hugo theme I have designed. The original reason that I wrote it was I needed a minimal example of Hugo themes when I was writing the blogdown book. Basically I wanted a simple theme that supports a navigation menu, a home page, other single pages, lists of pages, blog posts, categories, tags, and RSS. That is all. Nothing fancy. In terms of CSS and JavaScript, I really want to keep them minimal.</description>
+      <description></description>
+      
     </item>
     
   </channel>

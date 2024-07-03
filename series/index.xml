@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Series on UBIKS232 BLOG</title>
+    <link>https://ubiks232.io/series/</link>
+    <description>Recent content in Series on UBIKS232 BLOG</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <managingEditor>ubik.3141@gmail.com (UBIKS232)</managingEditor>
+    <webMaster>ubik.3141@gmail.com (UBIKS232)</webMaster><atom:link href="https://ubiks232.io/series/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>
