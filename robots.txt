@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://ubiks232.github.io/sitemap.xml

@@ -1,0 +1,53 @@
+<?xml-stylesheet type="text/xsl" href="https://ubiks232.github.io/sitemap.xsl"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://ubiks232.github.io/categories/</loc>
+    <lastmod>2024-12-01T10:55:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/post/</loc>
+    <lastmod>2024-12-01T10:55:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/tags/</loc>
+    <lastmod>2024-12-01T10:55:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/post/test/</loc>
+    <lastmod>2024-12-01T10:55:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/tags/test/</loc>
+    <lastmod>2024-12-01T10:55:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/categories/test/</loc>
+    <lastmod>2024-12-01T10:55:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/</loc>
+    <lastmod>2024-12-01T10:55:12+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+</urlset>
