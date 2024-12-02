@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>UBIKS232</title>
-    <link>https://ubiks232.github.io/</link>
-    <description>Recent content on UBIKS232</description>
+    <title>古诗文 on UBIKS232</title>
+    <link>https://ubiks232.github.io/tags/%E5%8F%A4%E8%AF%97%E6%96%87/</link>
+    <description>Recent content in 古诗文 on UBIKS232</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
-    <lastBuildDate>Mon, 02 Dec 2024 13:09:54 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 Dec 2024 13:09:54 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/tags/%E5%8F%A4%E8%AF%97%E6%96%87/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>将进酒</title>
       <link>https://ubiks232.github.io/post/qiangjinjiu/</link>
@@ -14,15 +14,6 @@
       
       <guid>https://ubiks232.github.io/post/qiangjinjiu/</guid>
       <description>将进酒 作者：李白 君不见，黄河之水天上来，奔流到海不复回。 君不见，高堂明镜悲白发，朝如青丝暮成雪！ 人生得意须尽欢，莫使金樽空对月。 天生我材必有</description>
-    </item>
-    
-    <item>
-      <title>Test</title>
-      <link>https://ubiks232.github.io/post/test/</link>
-      <pubDate>Sun, 01 Dec 2024 10:55:12 +0800</pubDate>
-      
-      <guid>https://ubiks232.github.io/post/test/</guid>
-      <description>123 $/frac{1}{137}$</description>
     </item>
     
   </channel>
