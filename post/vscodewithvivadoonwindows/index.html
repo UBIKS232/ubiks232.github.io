@@ -147,7 +147,9 @@
         <li><a href="#a前提">A.前提</a></li>
         <li><a href="#b配置">B.配置</a>
           <ul>
-            <li></li>
+            <li><a href="#1添加windows环境变量">1.添加Windows环境变量</a></li>
+            <li><a href="#2配置digitalide">2.配置DigitalIDE</a></li>
+            <li><a href="#3基本工具与语法">3.基本工具与语法</a></li>
           </ul>
         </li>
         <li><a href="#c总结">C.总结</a></li>
@@ -170,11 +172,11 @@
 </ul>
 <h2 id="b配置">B.配置</h2>
 <p>讲在前面: <del>VivadoGUI疑似有些过于效率低下了,</del> 为了了解VivadoGUI中开发流程的每一步在干什么, 调用了哪些工具, 故转而探究其CLI下的开发方式.</p>
-<h4 id="1添加windows环境变量">1.添加Windows环境变量</h4>
+<h3 id="1添加windows环境变量">1.添加Windows环境变量</h3>
 <p>将安装根目录下的<code>/Vivado/2024.2/bin</code>添加到Windows环境变量Path中, 保证xvlog, xelab, xsim等工具可以正常在命令行中调用, 可以在VSCode的命令行中使用<code>xvlog --version</code>测试环境变量是否正确配置, 一般需要先重启VSCode.</p>
-<h4 id="2配置digitalide">2.配置DigitalIDE</h4>
+<h3 id="2配置digitalide">2.配置DigitalIDE</h3>
 <p>一般来说该插件会正确识别环境变量中的Vivado, 需要关注的点是: 将Verilog, SystemVerilog, Vhdl的linter都选用vivado, 这样可以在VSCode内快捷检测语法错误.</p>
-<h4 id="3基本工具与语法">3.基本工具与语法</h4>
+<h3 id="3基本工具与语法">3.基本工具与语法</h3>
 <p><strong>Step1</strong>
 在简单开发中, 在VSCode中打开工程目录, 创建<code>src</code>, <code>sim</code>这两个文件夹, 在<code>src</code>中编写模块文件, 此外还要令写一份testbench, 用于后续测试.</p>
 <p><strong>Step2</strong>
