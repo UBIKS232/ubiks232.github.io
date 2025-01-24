@@ -3,7 +3,7 @@
 
 # Windows下在VSCode中基于VivadoCLI进行开发
 
-这是对于本人使用VivadodCLI(Command Line Interface)的一个简单总结.
+这是对于本人初使用VivadodCLI(Command Line Interface)的一个简单总结.
 
 # A.前提
 
