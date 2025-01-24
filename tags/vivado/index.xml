@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Vivado on UBIKS232</title>
+    <link>https://ubiks232.github.io/tags/vivado/</link>
+    <description>Recent content in Vivado on UBIKS232</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 24 Jan 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://ubiks232.github.io/tags/vivado/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VSCodeWithVivadoOnWindows</title>
+      <link>https://ubiks232.github.io/post/vscodewithvivadoonwindows/</link>
+      <pubDate>Fri, 24 Jan 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://ubiks232.github.io/post/vscodewithvivadoonwindows/</guid>
+      <description>Windows下在VSCode中基于VivadoCLI进行开发 这是对于本人使用VivadodCLI(Command Line Interface)的一</description>
+    </item>
+    
+  </channel>
+</rss>

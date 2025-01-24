@@ -2,35 +2,84 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://ubiks232.github.io/categories/</loc>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/categories/fpga/</loc>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://ubiks232.github.io/post/</loc>
-    <lastmod>2024-12-02T13:09:54+08:00</lastmod>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ubiks232.github.io/tags/</loc>
-    <lastmod>2024-12-02T13:09:54+08:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://ubiks232.github.io/tags/test/</loc>
-    <lastmod>2024-12-02T13:09:54+08:00</lastmod>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ubiks232.github.io/</loc>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/tags/vivado/</loc>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/categories/vscode/</loc>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/post/vscodewithvivadoonwindows/</loc>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/tags/xilinx/</loc>
+    <lastmod>2025-01-25T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/tags/%E5%8F%A4%E8%AF%97%E6%96%87%E8%AE%B0%E5%BD%95/</loc>
     <lastmod>2024-12-02T13:09:54+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://ubiks232.github.io/tags/%E5%8F%A4%E8%AF%97%E6%96%87/</loc>
+    <loc>https://ubiks232.github.io/categories/%E5%8F%A4%E8%AF%97%E6%96%87%E8%AE%B0%E5%BD%95/</loc>
+    <lastmod>2024-12-02T13:09:54+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ubiks232.github.io/tags/%E5%94%90/</loc>
     <lastmod>2024-12-02T13:09:54+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -44,14 +93,14 @@
   </url>
   
   <url>
-    <loc>https://ubiks232.github.io/categories/</loc>
+    <loc>https://ubiks232.github.io/post/test/</loc>
     <lastmod>2024-12-01T10:55:12+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://ubiks232.github.io/post/test/</loc>
+    <loc>https://ubiks232.github.io/tags/test/</loc>
     <lastmod>2024-12-01T10:55:12+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
