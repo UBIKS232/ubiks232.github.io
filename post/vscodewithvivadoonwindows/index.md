@@ -1,5 +1,5 @@
 
-<left><font face="STZhongsong" size=5>
+<left><font face="STZhongsong">
 
 # Windows下在VSCode中基于VivadoCLI进行开发
 
