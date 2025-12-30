@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>阅读RT-Thread内核实验手册-1 | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+    <div class="page-wrapper">
+        <main class="main-content">
+            <div class="container">
+                <header>
+                    <h1>阅读RT-Thread内核实验手册-1</h1>
+                    <p>
+                        <time datetime=" 2025-12-30T18:11:24&#43;08:00">
+                            2025-12-30
+                        </time>
+                    </p>
+                </header>
+
+                <div>
+                    <p><a href="https://www.rt-thread.org/document/site/rt-thread-version/rt-thread-standard/tutorialexperimental-manual/experimental-manual.pdf">RT-Thread内核实验手册</a></p>
+<h2 id="exp-1-线程的使用">EXP 1 线程的使用</h2>
+<p>不同优先级的线程间以<strong>抢占</strong>的方式进行调度, 进程可以用<strong>动态创建</strong>或者<strong>静态初始化</strong>, 被设计为死循环的线程一定要在循环中有<strong>让出CPU使用权的动作</strong>, 比如延时<strong>rt_thread_mdelay</strong>.</p>
+<h2 id="exp-2-线程的时间片轮转调度">EXP 2 线程的时间片轮转调度</h2>
+<p>1.相同优先级的进程使用<strong>时间片轮转</strong>方式进行调度, 自己可以定义一个<strong>THREAD_TIMESLICE</strong>来写入进程的时间片长度;</p>
+<p>2.两个不同进程可以使用<strong>同样的入口函数</strong>, 但是函数中相同的变量会被存储在<strong>不同的堆空间</strong>.</p>
+<p>Q: 在RT-Thread中, stack size应该依据什么设置?</p>
+<h2 id="exp-3-定时器的使用">EXP 3 定时器的使用</h2>
+<p>定时器可以是周期(periodic)定时器, 也可以是单次(one-shot)计时器, 默认使用<strong>HARD_TIMER</strong>, 定时器到达所定的时间周期时, OS会调取<strong>超时函数</strong>处理, 超时函数在初始化定时器时绑定.</p>
+
+                </div>
+
+                <p style="margin-top: 2rem;">
+                    <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+                </p>
+
+            </div>
+        </main>
+
+        <footer class="site-footer">
+            Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+            Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a>
+        </footer>
+    </div>
+
+</body>
+
+</html>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on ubiks232&#39;s blog</title>
-    <link>https://ubiks232.github.io/posts/</link>
-    <description>Recent content in Posts on ubiks232&#39;s blog</description>
+    <title>OS on ubiks232&#39;s blog</title>
+    <link>https://ubiks232.github.io/tags/os/</link>
+    <description>Recent content in OS on ubiks232&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 30 Dec 2025 18:11:24 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Dec 2025 18:11:24 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/tags/os/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>阅读RT-Thread内核实验手册-1</title>
       <link>https://ubiks232.github.io/posts/rt-thread%E5%AE%9E%E9%AA%8C/</link>
@@ -19,16 +19,6 @@ EXP 2 线程的时间片轮转调度 1.相同优先级的进程使用时间片�
 2.两个不同进程可以使用同样的入口函数, 但是函数中相同的变量会被存储在不同的堆空间.
 Q: 在RT-Thread中, stack size应该依据什么设置?
 EXP 3 定时器的使用 定时器可以是周期(periodic)定时器, 也可以是单次(one-shot)计时器, 默认使用HARD_TIMER, 定时器到达所定的时间周期时, OS会调取超时函数处理, 超时函数在初始化定时器时绑定.</description>
-    </item>
-    
-    <item>
-      <title>Hello World</title>
-      <link>https://ubiks232.github.io/posts/hello-world/</link>
-      <pubDate>Thu, 25 Dec 2025 14:56:41 +0800</pubDate>
-      
-      <guid>https://ubiks232.github.io/posts/hello-world/</guid>
-      <description>This is my first plain Hugo post!
- No theme No CSS Just pure HTML and Markdown  </description>
     </item>
     
   </channel>

@@ -29,7 +29,13 @@
                         
                         
                         
-                        <a href="/categories/init/">init</a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/categories/init/">init</a> <a href="/categories/rt-thread/">rt-thread</a> <a href="/categories/rtfsc/">rtfsc</a>
                     </div>
                     
 
@@ -42,7 +48,22 @@
                         
                         
                         
-                        <a href="/tags/init/">init</a>
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <a href="/tags/c/">c</a> <a href="/tags/embedded/">embedded</a> <a href="/tags/init/">init</a> <a href="/tags/linux/">linux</a> <a href="/tags/os/">os</a> <a href="/tags/rtos/">rtos</a>
                     </div>
                     
                 </div>
@@ -53,6 +74,19 @@
                 
                 <h2>Recent Articles</h2>
                 
+                
+                <article>
+                    <h3><a href="/posts/rt-thread%E5%AE%9E%E9%AA%8C/">阅读RT-Thread内核实验手册-1</a></h3>
+                    <time datetime=" 2025-12-30T18:11:24&#43;08:00">
+                        2025-12-30
+                    </time>
+                    <p>RT-Thread内核实验手册
+EXP 1 线程的使用 不同优先级的线程间以抢占的方式进行调度, 进程可以用动态创建或者静态初始化, 被设计为死循环的线程一定要在循环中有让出CPU使用权的动作, 比如延时rt_thread_mdelay.
+EXP 2 线程的时间片轮转调度 1.相同优先级的进程使用时间片轮转方式进行调度, 自己可以定义一个THREAD_TIMESLICE来写入进程的时间片长度;
+2.两个不同进程可以使用同样的入口函数, 但是函数中相同的变量会被存储在不同的堆空间.
+Q: 在RT-Thread中, stack size应该依据什么设置?
+EXP 3 定时器的使用 定时器可以是周期(periodic)定时器, 也可以是单次(one-shot)计时器, 默认使用HARD_TIMER, 定时器到达所定的时间周期时, OS会调取超时函数处理, 超时函数在初始化定时器时绑定.</p>
+                </article>
                 
                 <article>
                     <h3><a href="/posts/hello-world/">Hello World</a></h3>
