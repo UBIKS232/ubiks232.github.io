@@ -1,40 +1,32 @@
 /* 重置 */
 * {
+    margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
-html,
-body {
+html, body {
     margin: 0;
     padding: 0;
-    height: 100%;
-}
-
-body {
-    font-family: "STZhongsong", "Songti SC", "SimSun", "Times New Roman";
-    line-height: 1.2;
     color: #333;
+    font-family: "STZhongsong", "Songti SC", "SimSun", "Times New Roman";
+    line-height: 1.7;
     background-color: #fff;
 }
 
-/* Sticky Footer 布局 */
-.page-wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.main-content {
-    flex: 1;
-}
-
+/* 主容器：固定宽度 700px，居中 */
 .container {
-    max-width: 1080px;
-    width: 100%;
-    padding: 0rem 1rem;
+    width: 700px;
+    margin: 18px auto;
+    padding: 0 18px; /* 避免内容贴边 */
+}
+.container > header,
+.container > main,
+.container > article {
+    margin-bottom: 25px;
 }
 
-/* 防溢出 */
+/* 防溢出（保留） */
 .container img,
 .container table,
 .container pre,
@@ -44,16 +36,31 @@ body {
     display: block;
 }
 
-/* Footer：无背景、无边框，仅顶部一条细线 + 居中文字 */
+/* Code */
+/* 布局样式（GitHub 风格容器） */
+pre {
+    border-radius: 6px;
+    padding: 16px;
+    overflow: auto;
+    margin: 1em 0;
+    /* 注意：不要设 background-color！由 chroma.css 控制 */
+}
+pre code {
+    font-family: 'Courier New', 'STZhongsong', monospace;
+    font-size: 15px;
+    line-height: 1.25;
+    /* 不要设 color 或 background */
+}
+
+/* Footer：保持顶部细线 + 居中，但不再 sticky */
 .site-footer {
     text-align: center;
     padding: 1rem 0;
     font-size: 0.9rem;
     color: #777;
-    /* 关键：只加顶部边框，无背景色 */
     border-top: 1px solid #eee;
     background: transparent;
-    /* 确保透明 */
+    margin-top: 36px; /* 与上方内容留空 */
 }
 
 .site-footer a {
@@ -65,30 +72,31 @@ body {
     text-decoration: underline;
 }
 
-/* Taxonomies 样式 */
+/* Taxonomies 样式（保留原逻辑，仅微调间距） */
 .taxonomies {
-  margin: 0rem 0;
-  padding: 0rem 0;
-  border-bottom: 1px dashed #ddd;
+    margin: 18px 0;
+    padding: 0;
+    border-bottom: 1px dashed #ddd;
 }
 
 .taxonomies strong {
-  margin-right: 0.5rem;
-  color: #444;
+    margin-right: 0.5rem;
+    color: #444;
 }
 
 .taxonomies a {
-  color: #227dc9;
-  text-decoration: none;
+    color: #227dc9;
+    text-decoration: none;
 }
 
 .taxonomies a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
-/* 小屏优化 */
-@media (max-width: 768px) {
+/* 小屏优化：当屏幕 ≤700px 时，容器变为流式 */
+@media screen and (max-width: 700px) {
     .container {
-        padding: 0rem 1rem;
+        width: auto;
+        padding: 0 10px;
     }
 }

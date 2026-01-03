@@ -9,16 +9,16 @@
     <lastBuildDate>Tue, 30 Dec 2025 18:11:24 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>阅读RT-Thread内核实验手册-1</title>
-      <link>https://ubiks232.github.io/posts/rt-thread%E5%AE%9E%E9%AA%8C/</link>
+      <link>https://ubiks232.github.io/posts/%E9%98%85%E8%AF%BBrt-thread%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%E6%89%8B%E5%86%8C-1/</link>
       <pubDate>Tue, 30 Dec 2025 18:11:24 +0800</pubDate>
       
-      <guid>https://ubiks232.github.io/posts/rt-thread%E5%AE%9E%E9%AA%8C/</guid>
+      <guid>https://ubiks232.github.io/posts/%E9%98%85%E8%AF%BBrt-thread%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%E6%89%8B%E5%86%8C-1/</guid>
       <description>RT-Thread内核实验手册
-EXP 1 线程的使用 不同优先级的线程间以抢占的方式进行调度, 进程可以用动态创建或者静态初始化, 被设计为死循环的线程一定要在循环中有让出CPU使用权的动作, 比如延时rt_thread_mdelay.
-EXP 2 线程的时间片轮转调度 1.相同优先级的进程使用时间片轮转方式进行调度, 自己可以定义一个THREAD_TIMESLICE来写入进程的时间片长度;
+EXP 2 线程的使用 不同优先级的线程间以抢占的方式进行调度, 进程可以用动态创建或者静态初始化, 被设计为死循环的线程一定要在循环中有让出CPU使用权的动作, 比如延时rt_thread_mdelay.
+EXP 3 线程的时间片轮转调度 1.相同优先级的进程使用时间片轮转方式进行调度, 自己可以定义一个THREAD_TIMESLICE来写入进程的时间片长度;
 2.两个不同进程可以使用同样的入口函数, 但是函数中相同的变量会被存储在不同的堆空间.
 Q: 在RT-Thread中, stack size应该依据什么设置?
-EXP 3 定时器的使用 定时器可以是周期(periodic)定时器, 也可以是单次(one-shot)计时器, 默认使用HARD_TIMER, 定时器到达所定的时间周期时, OS会调取超时函数处理, 超时函数在初始化定时器时绑定.</description>
+EXP 4 定时器的使用 定时器可以是周期(periodic)定时器, 也可以是单次(one-shot)计时器, 默认使用HARD_TIMER, 定时器到达所定的时间周期时, OS会调取超时函数处理, 超时函数在初始化定时器时注册.</description>
     </item>
     
   </channel>
