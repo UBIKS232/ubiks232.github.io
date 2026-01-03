@@ -6,7 +6,19 @@
     <description>Recent content in init on ubiks232&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 30 Dec 2025 18:11:24 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/categories/init/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 03 Jan 2026 19:04:13 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/categories/init/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>阅读RT-Thread内核实验手册-2</title>
+      <link>https://ubiks232.github.io/posts/%E9%98%85%E8%AF%BBrt-thread%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%E6%89%8B%E5%86%8C-2/</link>
+      <pubDate>Sat, 03 Jan 2026 19:04:13 +0800</pubDate>
+      
+      <guid>https://ubiks232.github.io/posts/%E9%98%85%E8%AF%BBrt-thread%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%E6%89%8B%E5%86%8C-2/</guid>
+      <description>RT-Thread内核实验手册
+EXP 5 信号量—生产者消费者问题 1.信号量为0时不可以获取该信号量; 2.信号量的获取和发布分别对应让信号量的值减一或加一; 3.结合(1.)的说法, 可以使用一个初始值为1的信号量对其获取和发布起到一个锁的作用, 比如操作一个不同线程之间共用的数组时, 各个线程内可以在操作数组之前获取该信号量, 完成之后发布; 4.信号量可以用于非同步线程之间的通信, 结合(3.)实现的读写锁, 借由数组作为FIFO传递数据; 5.等待信号量时的挂起rt_sem_take可以使用RT_WAITING_FOREVER关键字.
+6 互斥量—优先级继承 1.AIGC by Qwen3:
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161  Q.</description>
+    </item>
+    
     <item>
       <title>阅读RT-Thread内核实验手册-1</title>
       <link>https://ubiks232.github.io/posts/%E9%98%85%E8%AF%BBrt-thread%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%E6%89%8B%E5%86%8C-1/</link>

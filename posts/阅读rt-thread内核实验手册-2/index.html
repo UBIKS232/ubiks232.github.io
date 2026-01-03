@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>阅读RT-Thread内核实验手册-2 | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chroma.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>阅读RT-Thread内核实验手册-2</h1>
+            <p>
+                <time datetime="2026-01-03T19:04:13&#43;08:00">
+                    2026-1-3
+                </time>
+            </p>
+        </header>
+
+        <div>
+            <p><a href="https://www.rt-thread.org/document/site/rt-thread-version/rt-thread-standard/tutorialexperimental-manual/experimental-manual.pdf">RT-Thread内核实验手册</a></p>
+<h2 id="exp-5-信号量生产者消费者问题">EXP 5 信号量—生产者消费者问题</h2>
+<p>1.信号量为0时不可以获取该信号量;
+2.信号量的<strong>获取</strong>和<strong>发布</strong>分别对应让信号量的值减一或加一;
+3.结合(1.)的说法, 可以使用一个初始值为1的信号量对其获取和发布起到一个锁的作用, 比如操作一个不同线程之间共用的数组时, 各个线程内可以在操作数组之前获取该信号量, 完成之后发布;
+4.信号量可以用于<strong>非同步线程之间的通信</strong>, 结合(3.)实现的读写锁, 借由数组作为<strong>FIFO</strong>传递数据;
+5.等待信号量时的挂起<strong>rt_sem_take</strong>可以使用<strong>RT_WAITING_FOREVER</strong>关键字.</p>
+<h2 id="6-互斥量优先级继承">6 互斥量—优先级继承</h2>
+<p>1.<strong>AIGC by Qwen3:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">Q.A:
+你提出的问题涉及两个核心概念：优先级反转（Priority Inversion） 和 互斥量的优先级继承机制（Priority Inheritance）。下面我将结合你提供的实验描述和知识库内容，详细解释这两者的关系，并重点说明为何在步骤（5）中“thread3 的优先级会被提升为 thread2 的优先级”。
+
+一、什么是优先级反转？
+
+优先级反转 是实时操作系统（RTOS）中一种经典的调度异常现象，指的是：
+高优先级任务因等待低优先级任务持有的资源而被阻塞，而在此期间，一个中等优先级任务却可以抢占 CPU 执行，从而导致高优先级任务被“间接”延迟执行。
+经典场景举例 [ty-reference](10)：
+假设有三个任务：
+Task H（高优先级）
+Task M（中优先级）
+Task L（低优先级）
+Task L 正在持有某个共享资源（如互斥量）。
+Task H 需要该资源，于是被阻塞，等待 Task L 释放。
+此时，Task M 就绪，由于其优先级高于 Task L，它会抢占 CPU。
+结果：Task H 被 Task M 间接阻塞，尽管它的优先级最高。
+
+这严重违背了“高优先级任务应尽快执行”的实时性原则。著名的 1997 年火星探路者号重启故障 就是由优先级反转引起的 [ty-reference](10)。
+
+二、互斥量如何解决优先级反转？——优先级继承机制
+
+普通信号量不具备所有权概念，任何任务都可以释放；而互斥量是一种特殊的二值信号量，具有以下关键特性 [ty-reference](5)：
+
+1. 所有权（Ownership）：只有获取互斥量的线程才能释放它。
+2. 递归访问支持：同一线程可多次获取而不死锁（需使用递归互斥量）。
+3. 优先级继承（Priority Inheritance）：当高优先级任务因等待互斥量被阻塞时，当前持有该互斥量的低优先级任务的优先级会被临时提升到与等待者相同的优先级，以加快其执行并尽快释放资源。
+
+三、针对你问题的具体分析：为什么（5）中 thread3 优先级被提升？
+
+根据你的实验设计 [[用户输入]]：
+thread1：优先级 9（最高），先 sleep 100ms，之后打印 thread2 和 thread3 的优先级。
+thread2：优先级 10，先 sleep 50ms，然后尝试获取 mutex。
+thread3：优先级 11（最低），立即获取 mutex，并 hold 500ms。
+执行流程解析：
+
+1. 系统启动后，thread3（优先级11）最先运行（因为优先级数值越大越低，在 RTOS 中通常数字越小优先级越高，但此处按你描述，9 &gt; 10 &gt; 11 表示 9 最高），它成功获取 mutex，进入 500ms 循环。
+2. 同时，thread2（优先级10）开始运行，打印自身优先级后 sleep 50ms。
+3. thread1（优先级9）sleep 100ms。
+4. 50ms 后，thread2 唤醒，尝试获取 mutex → 但 mutex 被 thread3 持有 → thread2 被阻塞。
+此时，thread2（优先级10）是比 thread3（11）更高的任务，且正在等待 thread3 持有的资源。
+RTOS 检测到这种情况，触发优先级继承机制：将 thread3 的优先级临时提升为 10（即 thread2 的优先级）[ty-reference](9)。
+这样，thread3 不再会被其他优先级 ≤10 的任务抢占（比如如果有优先级10.5的任务也不会存在，因为整数优先级），从而能尽快完成并释放 mutex。
+5. 100ms 时，thread1 唤醒，打印 thread2 和 thread3 的优先级 → 发现两者都是 10 → 验证了优先级继承生效。
+✅ 因此，步骤（5）中“thread3 的优先级被提升为和 thread2 相同”正是 优先级继承机制在起作用，目的是防止优先级反转。
+
+四、为什么普通信号量不能解决这个问题？
+
+普通二值信号量：
+没有所有权概念：任何任务都可以调用 give() 释放信号量，容易出错 [ty-reference](9)。
+不支持优先级继承：即使高优先级任务在等待，持有信号量的低优先级任务仍可能被中优先级任务抢占，导致优先级反转持续发生 [ty-reference](10)。
+
+而互斥量通过内核实现的优先级继承协议（PIP），动态调整任务优先级，确保资源持有者能尽快释放资源，从而保障高优先级任务的响应性。
+
+五、补充：互斥量不能在中断中使用的原因
+
+中断服务例程（ISR）：
+不能被阻塞（必须快速执行）。
+没有“任务上下文”，无法拥有互斥量所有权。
+若在 ISR 中尝试获取已被占用的互斥量，会导致系统死锁或不可预测行为。
+
+因此，互斥量仅适用于任务间同步，ISR 应使用二值信号量或队列进行通信 [ty-reference](5)。
+
+总结
+优先级反转：高优先级任务被低优先级任务间接阻塞，因中优先级任务抢占。
+互斥量的优先级继承：当高优先级任务等待低优先级任务持有的互斥量时，临时提升低优先级任务的优先级，使其尽快释放资源。
+在你的实验中，thread2（优先级10）等待 thread3（11）持有的 mutex，触发继承，thread3 优先级升至10，从而避免被其他任务干扰，确保系统实时性。
+
+这一机制是 FreeRTOS、μC/OS-II 等实时操作系统保障确定性调度的关键特性 [ty-reference](6)。
+
+Q.B:
+你的问题非常深入，涉及 RTOS 中 优先级继承机制的触发条件、阈值、信号量与互斥量的本质区别、递归访问 以及 所有权语义。下面我将逐一详细解答，并结合 FreeRTOS 和通用 RTOS 原理进行说明。
+
+一、“RTOS 检测到这种情况，触发优先级继承机制”——是否有时间阈值（如多少 OS Tick）？
+✅ 答案：没有基于时间（Tick）的阈值。
+
+优先级继承（Priority Inheritance, PI）是 事件驱动、立即触发 的机制，不依赖超时或等待时间。
+触发条件（以 FreeRTOS 为例）[ty-reference](4)：
+当以下 所有条件同时满足 时，RTOS 内核 立即 触发优先级继承：
+
+1. 任务 A（高优先级）尝试获取一个互斥量（Mutex）；
+2. 该互斥量当前已被任务 B（低优先级）持有；
+3. 任务 A 因此被阻塞（进入等待队列）；
+4. 任务 A 的优先级 &gt; 任务 B 的当前优先级。
+⚡ 一旦满足，内核 立刻 调用 adjust_priority() 类函数，将任务 B 的优先级提升至任务 A 的优先级（或更高，若有多个等待者，则取最高者）。
+❌ 不存在“等待 10ms 才提升”这类延迟
+这不是超时重试机制（如 xSemaphoreTake(mutex, timeout) 中的 timeout）。
+PI 是同步、原子的操作，发生在 xSemaphoreTake() 内部的上下文切换之前。
+📌 结论：无 Tick 阈值，纯逻辑判断，即时发生。
+
+二、“即使高优先级任务在等待，持有信号量的低优先级任务仍可能被中优先级任务抢占”——为什么？什么叫‘持续发生’？
+1. 为什么普通信号量无法防止抢占？
+
+普通 二值信号量（Binary Semaphore） 在 FreeRTOS 或其他 RTOS 中：
+只是一个计数器（0/1）；
+没有记录“谁持有它”；
+释放操作（give）可由任意任务或 ISR 调用；
+内核不会因为它被占用而调整任何任务的优先级。
+2. 举例说明“优先级反转持续发生”
+
+假设有三个任务（优先级：H=1, M=2, L=3，数字越小优先级越高）：
+
+时间 事件
+------ ------
+t0 L 获取二值信号量（进入临界区）
+t1 H 就绪，尝试获取同一信号量 → 阻塞
+t2 M 就绪（优先级 2 &gt; L 的 3）→ 抢占 L
+t3 M 执行 100ms（与信号量无关）
+t4 M 结束，L 恢复执行
+t5 L 释放信号量，H 被唤醒
+
+👉 问题：H 的等待时间 = L 的临界区时间 + M 的全部执行时间。
+
+如果系统中有 多个中优先级任务（M1, M2, ..., Mn），它们都可能在 L 持有信号量期间就绪并运行，那么：
+H 的阻塞时间 = L 的临界区时间 + Σ(所有中优先级任务的执行时间)
+
+这就是 “优先级反转持续发生” —— 反转的影响被不断延长，高优先级任务的响应时间完全不可预测，严重破坏实时性 [ty-reference](1)。
+对比：互斥量 + 优先级继承
+当 H 阻塞时，L 的优先级被提升为 1；
+M（优先级 2）无法抢占 L（当前有效优先级 1）；
+L 快速完成临界区，释放互斥量；
+H 立即运行。
+
+✅ H 的等待时间 = L 的临界区时间（确定、最短）。
+
+三、什么是“递归访问”（Recursive Access）？
+定义：
+同一个任务可以多次获取同一个互斥量而不死锁，只要释放次数等于获取次数。
+为什么需要？
+避免“自死锁”（self-deadlock）。例如：
+
+c
+void vCommonFunction(void) {
+xSemaphoreTake(xMutex, portMAX_DELAY);
+// 访问共享资源
+xSemaphoreGive(xMutex);
+}
+
+void vTaskA(void *pv) {
+xSemaphoreTake(xMutex, portMAX_DELAY); // 第一次获取
+vCommonFunction(); // 内部再次尝试获取 → 若非递归，会死锁！
+xSemaphoreGive(xMutex); // 第一次释放
+}
+实现机制：
+互斥量内部维护一个 lock_count（嵌套计数）和 owner 字段 [ty-reference](1)。
+第一次获取：lock_count = 1，记录 owner。
+同一任务再次获取：lock_count++，直接成功。
+每次释放：lock_count--，直到为 0 才真正释放互斥量。
+🔸 FreeRTOS 中需使用 xSemaphoreCreateRecursiveMutex() 创建递归互斥量，并用 xSemaphoreTakeRecursive() / xSemaphoreGiveRecursive() 操作 [ty-reference](12)。
+
+总结表：互斥量 vs 二值信号量
+
+特性 互斥量（Mutex） 二值信号量（Binary Semaphore）
+------ ------------------ -------------------------------
+所有权 ✅ 有（仅持有者可释放） ❌ 无（任意任务可释放）
+优先级继承 ✅ 支持 ❌ 不支持
+递归访问 ✅ 支持（需专用 API） ❌ 不支持（重复获取会死锁）
+用途 保护临界资源（互斥） 任务/ISR 同步
+中断中使用 ❌ 禁止 ✅ 允许（常用于 ISR 通知任务）
+触发 PI 阈值 ❌ 无（立即触发） N/A
+
+希望这些解释能彻底澄清你的疑问！
+</code></pre></td></tr></table>
+</div>
+</div><p>2.同一个互斥量(mutex)可以被多个线程使用，但<strong>同一时刻只能被一个线程持有</strong>，并且每个线程都必须<strong>先成功获取它</strong>，才能释放它(实验代码正确阐述了这个观点).</p>
+
+        </div>
+
+        <p style="margin-top: 2rem;">
+            <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a>
+    </footer>
+</body>
+</html>
