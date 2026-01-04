@@ -14,9 +14,9 @@ html, body {
     background-color: #fff;
 }
 
-/* 主容器：固定宽度 700px，居中 */
+/* 主容器：固定宽度 1000px，居中 */
 .container {
-    width: 700px;
+    width: 1000px;
     margin: 18px auto;
     padding: 0 18px; /* 避免内容贴边 */
 }

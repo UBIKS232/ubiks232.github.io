@@ -21,11 +21,11 @@
         <div>
             <p><a href="https://www.rt-thread.org/document/site/rt-thread-version/rt-thread-standard/tutorialexperimental-manual/experimental-manual.pdf">RT-Thread内核实验手册</a></p>
 <h2 id="exp-5-信号量生产者消费者问题">EXP 5 信号量—生产者消费者问题</h2>
-<p>1.信号量为0时不可以获取该信号量;
-2.信号量的<strong>获取</strong>和<strong>发布</strong>分别对应让信号量的值减一或加一;
-3.结合(1.)的说法, 可以使用一个初始值为1的信号量对其获取和发布起到一个锁的作用, 比如操作一个不同线程之间共用的数组时, 各个线程内可以在操作数组之前获取该信号量, 完成之后发布;
-4.信号量可以用于<strong>非同步线程之间的通信</strong>, 结合(3.)实现的读写锁, 借由数组作为<strong>FIFO</strong>传递数据;
-5.等待信号量时的挂起<strong>rt_sem_take</strong>可以使用<strong>RT_WAITING_FOREVER</strong>关键字.</p>
+<p>1.信号量为0时不可以获取该信号量;</p>
+<p>2.信号量的<strong>获取</strong>和<strong>发布</strong>分别对应让信号量的值减一或加一;</p>
+<p>3.结合(1.)的说法, 可以使用一个初始值为1的信号量对其获取和发布起到一个锁的作用, 比如操作一个不同线程之间共用的数组时, 各个线程内可以在操作数组之前获取该信号量, 完成之后发布;</p>
+<p>4.信号量可以用于<strong>非同步线程之间的通信</strong>, 结合(3.)实现的读写锁, 借由数组作为<strong>FIFO</strong>传递数据;</p>
+<p>5.等待信号量时的挂起<strong>rt_sem_take</strong>可以使用<strong>RT_WAITING_FOREVER</strong>关键字.</p>
 <h2 id="6-互斥量优先级继承">6 互斥量—优先级继承</h2>
 <p>1.<strong>AIGC by Qwen3:</strong></p>
 <div class="highlight"><div class="chroma">

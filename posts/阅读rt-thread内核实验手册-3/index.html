@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>阅读RT-Thread内核实验手册-2 | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chroma.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>阅读RT-Thread内核实验手册-2</h1>
+            <p>
+                <time datetime="2026-01-04T18:22:21&#43;08:00">
+                    2026-1-4
+                </time>
+            </p>
+        </header>
+
+        <div>
+            <h2 id="exp-7-事件集的使用">EXP 7 事件集的使用</h2>
+<p>1.事件的发布者使用不同的<strong>事件标志(event_flag)<strong>发布事件, 事件的接收者在recv函数中写入所要接收的flag以及对多个flag的判断方式(OR, AND&hellip;), 并且进行</strong>清空flag</strong>的操作, 完成一次事件的发送与接收;</p>
+<p>2.事件集用于达到多条件情况下线程间同步.</p>
+<h2 id="exp-8-邮箱的使用">EXP 8 邮箱的使用</h2>
+<p>1.邮箱可以缓存消息, 比如使用<strong>FIFO(RT_IPC_FLAG_FIFO)<strong>的方式进行非同步线程通信, 邮箱的大小(邮件数)可以自己定义, 具体为</strong>邮件数 = 所定义的字节数组大小(内存池大小) / 4</strong>, 即<strong>最大消息大小为4字节</strong>;</p>
+<p>2.接收者以<strong>轮询</strong>的方式进行邮件内容接收.</p>
+<h2 id="exp-9-消息队列的使用">EXP 9 消息队列的使用</h2>
+<p>1.用于异步通信的机制, 可以用于接收中断或者普通线程所发布的不定长消息, 消息缓存的方式可以是FIFO;</p>
+<p>2.<strong>AIGC by Qwen3:</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text">✅ 用 FIFO：
+    两个进程间传递连续数据流（如传感器数据、日志），且无需消息边界.
+✅ 用消息队列：
+    需要解耦、异步、可靠、带优先级/类型的通信，如微服务间事件通知、订单处理系统.
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="exp-10-动态内存堆的使用">EXP 10 动态内存堆的使用</h2>
+<p>使用<strong>rt_malloc</strong>以及<strong>rt_free</strong>用于申请和释放动态内存, rt_malloc的返回值为RT_NULL时为申请失败.</p>
+
+        </div>
+
+        <p style="margin-top: 2rem;">
+            <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a>
+    </footer>
+</body>
+</html>
