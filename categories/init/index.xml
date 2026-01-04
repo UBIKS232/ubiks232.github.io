@@ -6,7 +6,22 @@
     <description>Recent content in init on ubiks232&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Sun, 04 Jan 2026 18:22:21 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/categories/init/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 04 Jan 2026 23:31:56 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/categories/init/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows下git Push显示permission Denied问题排查与解决</title>
+      <link>https://ubiks232.github.io/posts/windows%E4%B8%8Bgit-push%E6%98%BE%E7%A4%BApermission-denied%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E4%B8%8E%E8%A7%A3%E5%86%B3/</link>
+      <pubDate>Sun, 04 Jan 2026 23:31:56 +0800</pubDate>
+      
+      <guid>https://ubiks232.github.io/posts/windows%E4%B8%8Bgit-push%E6%98%BE%E7%A4%BApermission-denied%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E4%B8%8E%E8%A7%A3%E5%86%B3/</guid>
+      <description>Windows下ssh -T能通, 但是git push推送失败 前提：ssh key已正确生成, 并且公钥已添加到GitHub(或其他 Git 平台). 现象： 在 PowerShell 中执行git push报错：
+1 2  git@github.com: Permission denied (publickey). fatal: Could not read from remote repository.   但执行ssh -T git@github.com却显示认证成功.
+原因： git推送时使用的ssh可执行文件和测试用的ssh可执行文件不是同一个可执行文件.
+使用where.exe ssh找到的是C:\Windows\System32\OpenSSH\ssh.exe, 而通过git config --global core.sshCommand发现, Git for Windows使用了它自带的ssh.exe(如 &amp;hellip;/Git/usr/bin/ssh.exe), 而该ssh与Windows的OpenSSH相比, 无法正确加载位于Windows用户目录下的私钥, 造成前面的问题.
+解决方法： 强制git使用Windows自带的 OpenSSH：
+1  git config --global core.sshCommand &amp;#34;C:/Windows/System32/OpenSSH/ssh.exe&amp;#34;   之后再次执行git push即可成功.
+注意：确保远程仓库地址是SSH格式(如git@github.com:[user-name]/[repo-name].git), 而非HTTPS.</description>
+    </item>
+    
     <item>
       <title>阅读RT-Thread内核实验手册-2</title>
       <link>https://ubiks232.github.io/posts/%E9%98%85%E8%AF%BBrt-thread%E5%86%85%E6%A0%B8%E5%AE%9E%E9%AA%8C%E6%89%8B%E5%86%8C-3/</link>

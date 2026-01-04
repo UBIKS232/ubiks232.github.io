@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Windows下git Push显示permission Denied问题排查与解决 | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chroma.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Windows下git Push显示permission Denied问题排查与解决</h1>
+            <p>
+                <time datetime="2026-01-04T23:31:56&#43;08:00">
+                    2026-1-4
+                </time>
+            </p>
+        </header>
+
+        <div>
+            <h2 id="windows下ssh--t能通-但是git-push推送失败">Windows下<code>ssh -T</code>能通, 但是<code>git push</code>推送失败</h2>
+<h2 id="前提ssh-key已正确生成-并且公钥已添加到github或其他-git-平台">前提：ssh key已正确生成, 并且公钥已添加到GitHub(或其他 Git 平台).</h2>
+<h2 id="现象">现象：</h2>
+<p>在 PowerShell 中执行<code>git push</code>报错：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="n">git</span><span class="nv">@github</span><span class="p">.</span><span class="n">com</span><span class="err">:</span> <span class="n">Permission</span> <span class="n">denied</span> <span class="p">(</span><span class="n">publickey</span><span class="p">).</span>
+<span class="n">fatal</span><span class="err">:</span> <span class="n">Could</span> <span class="n">not</span> <span class="n">read</span> <span class="n">from</span> <span class="n">remote</span> <span class="n">repository</span><span class="p">.</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>但执行<code>ssh -T git@github.com</code>却显示认证成功.</p>
+<h2 id="原因">原因：</h2>
+<p>git推送时使用的ssh可执行文件和测试用的ssh可执行文件不是同一个可执行文件.</p>
+<p>使用<code>where.exe ssh</code>找到的是<code>C:\Windows\System32\OpenSSH\ssh.exe</code>, 而通过<code>git config --global core.sshCommand</code>发现, Git for Windows使用了它自带的ssh.exe(如 &hellip;/Git/usr/bin/ssh.exe), 而该ssh与Windows的OpenSSH相比, 无法正确加载位于Windows用户目录下的私钥, 造成前面的问题.</p>
+<h2 id="解决方法">解决方法：</h2>
+<p>强制git使用Windows自带的 OpenSSH：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-PowerShell" data-lang="PowerShell"><span class="n">git</span> <span class="n">config</span> <span class="p">-</span><span class="n">-global</span> <span class="n">core</span><span class="p">.</span><span class="n">sshCommand</span> <span class="s2">&#34;C:/Windows/System32/OpenSSH/ssh.exe&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>之后再次执行<code>git push</code>即可成功.</p>
+<p>注意：确保远程仓库地址是SSH格式(如<code>git@github.com:[user-name]/[repo-name].git</code>), 而非HTTPS.</p>
+
+        </div>
+
+        <p style="margin-top: 2rem;">
+            <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a>
+    </footer>
+</body>
+</html>
