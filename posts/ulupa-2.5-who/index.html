@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ULUPA-2.5-who | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chroma.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ULUPA-2.5-who</h1>
+            <p>
+                <time datetime="2026-01-06T20:59:11&#43;08:00">
+                    2026-1-6
+                </time>
+            </p>
+        </header>
+
+        <div>
+            <p>Understanding Linux/Unix Programming A Guide 2 Theory And Practice</p>
+<h2 id="who是怎么工作的-是怎么实现的"><code>who</code>是怎么工作的? 是怎么实现的?</h2>
+<p>使用<code>man who</code>查询得到&quot;&hellip;If FILE is not specified, use /var/run/utmp.  /var/log/wtmp as FILE is common&hellip;&quot;, 因此应该寻找一个读取utmp/wtmp文件的方法, 此时需要知道这两个个文件的数据结构.</p>
+<p>使用<code>man -k utmp</code>, 查找与utmp相关的条目, 在我的系统上找到<code>utmp (5)             - login records</code>的记录, 因此使用<code>man 5 utmp</code>查询, 得到utmp文件中的数据结构, 即以结构体utmpx或utmp形式组织的数据结构.</p>
+<h2 id="能不能自己写一个who">能不能自己写一个<code>who</code>?</h2>
+<p>简单的实现方式, 就是使用<code>read</code>读取文件, 然后使用格式化输出打印到终端, 这个过程需要使用只读的方式打开utmp文件, 因此还要使用到<code>open</code>和<code>close</code>, 格式化输出过程中, 登陆时间显示的是描述, 使用<code>ctime</code>将其转化为日期加时间的表示方式.</p>
+<p>最终效果如下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;utmp.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;utmpx.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;time.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="c1">// #define SHOW_HOST
+</span><span class="c1"></span>
+<span class="c1">// int close(int fd);
+</span><span class="c1">// int open(const char *pathname, int flags);
+</span><span class="c1">// ssize_t read(int fd, void *buf, size_t count);
+</span><span class="c1"></span>
+<span class="kt">void</span> <span class="nf">show_time</span><span class="p">(</span><span class="kt">int</span> <span class="n">timeval</span><span class="p">){</span>
+    <span class="kt">char</span> <span class="o">*</span><span class="n">cp</span><span class="p">;</span>
+    <span class="k">const</span> <span class="n">time_t</span> <span class="n">timetimeval</span> <span class="o">=</span> <span class="p">(</span><span class="k">const</span> <span class="n">time_t</span><span class="p">)</span><span class="n">timeval</span><span class="p">;</span>
+    <span class="n">cp</span> <span class="o">=</span> <span class="n">ctime</span><span class="p">(</span><span class="o">&amp;</span><span class="n">timetimeval</span><span class="p">);</span>
+    <span class="n">cp</span><span class="p">[</span><span class="n">strcspn</span><span class="p">(</span><span class="n">cp</span><span class="p">,</span> <span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">)]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span> <span class="c1">// replace &#39;\n&#39; with &#39;\0&#39;
+</span><span class="c1"></span>    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;%s&#34;</span><span class="p">,</span> <span class="n">cp</span><span class="p">);</span>
+    <span class="c1">// printf(&#34; &#34;);
+</span><span class="c1"></span>    <span class="c1">// printf(&#34;%12.12s&#34;, cp + 4);
+</span><span class="c1"></span><span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">show_info</span><span class="p">(</span><span class="k">struct</span> <span class="n">utmpx</span> <span class="o">*</span><span class="n">utmpbuf</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">utmpbuf</span><span class="o">-&gt;</span><span class="n">ut_type</span> <span class="o">!=</span> <span class="n">USER_PROCESS</span><span class="p">)</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;%-8.8s&#34;</span><span class="p">,</span> <span class="n">utmpbuf</span><span class="o">-&gt;</span><span class="n">ut_user</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;%-8.8s&#34;</span><span class="p">,</span> <span class="n">utmpbuf</span><span class="o">-&gt;</span><span class="n">ut_line</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">);</span>
+    <span class="c1">// printf(&#34;%10d&#34;, utmpbuf-&gt;ut_tv.tv_sec);
+</span><span class="c1"></span>    <span class="n">show_time</span><span class="p">(</span><span class="n">utmpbuf</span><span class="o">-&gt;</span><span class="n">ut_tv</span><span class="p">.</span><span class="n">tv_sec</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34; &#34;</span><span class="p">);</span>
+<span class="cp">#ifdef SHOW_HOST
+</span><span class="cp"></span>    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;(%s)&#34;</span><span class="p">,</span> <span class="n">utmpbuf</span><span class="o">-&gt;</span><span class="n">ut_host</span><span class="p">);</span>
+<span class="cp">#endif
+</span><span class="cp"></span>    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="k">struct</span> <span class="n">utmpx</span> <span class="n">cur_record</span><span class="p">;</span>
+    <span class="c1">// char cur_record[400];
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">utmpfd</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">bufsize</span> <span class="o">=</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">utmpx</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">utmpfd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="n">UTMP_FILE</span><span class="p">,</span> <span class="n">O_RDONLY</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="n">UTMP_FILE</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// if(read(utmpfd, &amp;cur_record, bufsize) != bufsize){
+</span><span class="c1"></span>    <span class="c1">//      perror(&#34;read failed.\n&#34;);
+</span><span class="c1"></span>    <span class="c1">//      exit(1);
+</span><span class="c1"></span>    <span class="c1">// }
+</span><span class="c1"></span>    <span class="c1">// int ttfd = open(&#34;./test&#34;, O_RDWR | O_CREAT);
+</span><span class="c1"></span>    <span class="c1">// write(ttfd, &amp;(cur_record.ut_id), sizeof(cur_record.ut_id));
+</span><span class="c1"></span>    <span class="c1">// close(ttfd);
+</span><span class="c1"></span>
+    <span class="k">while</span> <span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">utmpfd</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">cur_record</span><span class="p">,</span> <span class="n">bufsize</span><span class="p">)</span> <span class="o">==</span> <span class="n">bufsize</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">show_info</span><span class="p">(</span><span class="o">&amp;</span><span class="n">cur_record</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">close</span><span class="p">(</span><span class="n">utmpfd</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong>: 显示时间的函数<code>show_time</code>需要传值处理, 不要在向该函数传值的时候直接写成<code>show_time((const time_t *)&amp;utmpbuf-&gt;ut_tv.tv_sec)</code>, 这样会导致<code>ctime</code>使用这个指针的时候读取8字节的内容, 而根据tv_sec的定义, 该数据只占4字节!</p>
+
+        </div>
+
+        <p style="margin-top: 2rem;">
+            <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a> |
+        E-mail: ubik DOT 3141 AT gmail DOT com
+    </footer>
+</body>
+</html>

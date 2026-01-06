@@ -11,6 +11,7 @@ html, body {
     color: #333;
     font-family: "STZhongsong", "Songti SC", "SimSun", "Times New Roman";
     line-height: 1.7;
+    font-size: 1.25em;
     background-color: #fff;
 }
 
@@ -33,22 +34,47 @@ html, body {
 .container code {
     max-width: 100%;
     height: auto;
-    display: block;
+    display: block; /* 会导致行内代码变成block!! */
 }
 
 /* Code */
 /* 布局样式（GitHub 风格容器） */
+/* 行内 code 必须保持 inline */
+.container :not(pre) > code,
+.container p code,
+.container li code,
+.container h1 code,
+.container h2 code,
+.container h3 code,
+.container h4 code,
+.container h5 code,
+.container h6 code {
+    max-width: 100%;
+    height: auto;
+    display: inline; /* 或 inline-block */
+    font-family: 'Courier New', monospace;
+    font-size: 1.00em;
+    background-color: #bababa;
+    padding: 0.15em 0.3em;
+    border-radius: 3px;
+    color: rgba(255, 0, 115, 0.735); /* 可选：与 GitHub 风格一致 */
+    font-family: 'Courier New', Consolas, monospace;
+    font-size: 1.0em;
+    background-color: #f5f5f5; /* 建议用更浅的灰，如 GitHub 的 #f6f8fa */
+    padding: 0.15em 0.3em;
+    border-radius: 3px;
+}
 pre {
-    border-radius: 6px;
-    padding: 16px;
+    border-radius: 2px;
+    padding: 4px;
     overflow: auto;
-    margin: 1em 0;
+    margin: 0.5em 0;
     /* 注意：不要设 background-color！由 chroma.css 控制 */
 }
 pre code {
     font-family: 'Courier New', 'STZhongsong', monospace;
-    font-size: 15px;
-    line-height: 1.25;
+    font-size: 1.0em;
+    line-height: 1.5;
     /* 不要设 color 或 background */
 }
 

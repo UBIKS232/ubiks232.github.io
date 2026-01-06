@@ -19,10 +19,10 @@
         </header>
 
         <div>
-            <h2 id="windows下ssh--t能通-但是git-push推送失败">Windows下ssh -T能通, 但是git push推送失败</h2>
-<h2 id="前提ssh-key已正确生成-并且公钥已添加到github或其他-git-平台">前提：ssh key已正确生成, 并且公钥已添加到GitHub(或其他 Git 平台).</h2>
-<h2 id="现象">现象：</h2>
-<p>在 PowerShell 中执行<code>git push</code>报错：</p>
+            <h2 id="1-windows下ssh--t能通-但是git-push推送失败">1. Windows下<code>ssh -T</code>能通, 但是<code>git push</code>推送失败</h2>
+<h2 id="2-前提ssh-key已正确生成-并且公钥已添加到github或其他-git-平台">2. 前提：ssh key已正确生成, 并且公钥已添加到GitHub(或其他 Git 平台).</h2>
+<h2 id="3-现象">3. 现象：</h2>
+<p>在PowerShell中执行<code>git push</code>报错：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -34,10 +34,10 @@
 </code></pre></td></tr></table>
 </div>
 </div><p>但执行<code>ssh -T git@github.com</code>却显示认证成功.</p>
-<h2 id="原因">原因：</h2>
+<h2 id="4-原因">4. 原因：</h2>
 <p>git推送时使用的ssh可执行文件和测试用的ssh可执行文件不是同一个可执行文件.</p>
-<p>使用<code>where.exe ssh</code>找到的是<code>C:\Windows\System32\OpenSSH\ssh.exe</code>, 而通过<code>git config --global core.sshCommand</code>发现, Git for Windows使用了它自带的ssh.exe(如 &hellip;/Git/usr/bin/ssh.exe), 而该ssh与Windows的OpenSSH相比, 无法正确加载位于Windows用户目录下的私钥, 造成前面的问题.</p>
-<h2 id="解决方法">解决方法：</h2>
+<p>使用<code>where.exe ssh</code>找到的是<code>C:\Windows\System32\OpenSSH\ssh.exe</code>, 而通过<code>git config --global core.sshCommand</code>发现, Git for Windows使用了它自带的ssh.exe(如<code>.../Git/usr/bin/ssh.exe</code>), 而该ssh与Windows的OpenSSH相比, 无法正确加载位于Windows用户目录下的私钥, 造成前面的问题.</p>
+<h2 id="5-解决方法">5. 解决方法：</h2>
 <p>强制git使用Windows自带的 OpenSSH：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -59,7 +59,8 @@
 
     <footer class="site-footer">
         Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
-        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a>
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a> |
+        E-mail: ubik DOT 3141 AT gmail DOT com
     </footer>
 </body>
 </html>
