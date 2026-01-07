@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ULUPA-2.6-cp | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chroma.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>ULUPA-2.6-cp</h1>
+            <p>
+                <time datetime="2026-01-07T13:35:35&#43;08:00">
+                    2026-1-7
+                </time>
+            </p>
+        </header>
+
+        <div>
+            <p>Understanding Linux/Unix Programming A Guide 2 Theory And Practice</p>
+<p>简单的cp实现起来很清楚: {创建新文件+打开旧文件}-&gt;使用缓存的字节数组读取旧文件-&gt;将读取的内容写入新文件-&gt;{关闭新文件+关闭旧文件}.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#define BUFFERSIZE 4096
+</span><span class="cp">#define COPYMODE 0644
+</span><span class="cp"></span>
+<span class="kt">void</span> <span class="nf">oops</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">err</span><span class="p">);</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">argv</span><span class="p">[])</span>
+<span class="p">{</span>
+
+    <span class="kt">int</span> <span class="n">old_fd</span><span class="p">,</span> <span class="n">new_fd</span><span class="p">,</span> <span class="n">n_char</span><span class="p">;</span>
+    <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="n">BUFFERSIZE</span><span class="p">];</span>
+
+    <span class="c1">// if(argc != 3) oops(&#34;missing file operand.\n&#34;, &#34;argument&#34;);
+</span><span class="c1"></span>    <span class="c1">// 这样做会导致perror输出Sucess, 因为没有函数对errno赋值, 则errno保持0, 即没有错误
+</span><span class="c1"></span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">argc</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;missing file operand.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">old_fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">O_RDONLY</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">oops</span><span class="p">(</span><span class="n">__LINE__</span><span class="p">,</span> <span class="s">&#34;err open&#34;</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">new_fd</span> <span class="o">=</span> <span class="n">creat</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">COPYMODE</span><span class="p">))</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">oops</span><span class="p">(</span><span class="n">__LINE__</span><span class="p">,</span> <span class="s">&#34;err creat&#34;</span><span class="p">);</span>
+
+    <span class="k">while</span> <span class="p">((</span><span class="n">n_char</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">old_fd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">BUFFERSIZE</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// if(write(new_fd, buf, BUFFERSIZE) != n_char) oops(__LINE__, &#34;err write&#34;);
+</span><span class="c1"></span>        <span class="c1">// 这里写BUFFERSIZE的话会导致写入随机内容, 要与上面读到的字节数相同
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="n">write</span><span class="p">(</span><span class="n">new_fd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="n">n_char</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_char</span><span class="p">)</span>
+            <span class="n">oops</span><span class="p">(</span><span class="n">__LINE__</span><span class="p">,</span> <span class="s">&#34;err write&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">// 因错误跳出循环的处理
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">n_char</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">oops</span><span class="p">(</span><span class="n">__LINE__</span><span class="p">,</span> <span class="s">&#34;err read&#34;</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">((</span><span class="n">close</span><span class="p">(</span><span class="n">old_fd</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="n">close</span><span class="p">(</span><span class="n">new_fd</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">oops</span><span class="p">(</span><span class="n">__LINE__</span><span class="p">,</span> <span class="s">&#34;err close&#34;</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">void</span> <span class="nf">oops</span><span class="p">(</span><span class="kt">int</span> <span class="n">pos</span><span class="p">,</span> <span class="kt">char</span> <span class="o">*</span><span class="n">err</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;./cp1.c:%d</span><span class="se">\t</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">pos</span><span class="p">);</span>
+    <span class="n">perror</span><span class="p">(</span><span class="n">err</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong>:</p>
+<ol>
+<li>在没有任何系统调用或者系统调用不出错的前提下, 使用<code>perror</code>会打印出<code>&quot;任意字符串&quot;:Sucess</code>的内容;</li>
+<li><code>write(new_fd, buf, n_char) != n_char</code>如果写成了<code>write(new_fd, buf, BUFFERSIZE) != n_char</code>会导致写入<code>BUFFERSIZE-n_char</code>的随机内容!</li>
+</ol>
+
+        </div>
+
+        <p style="margin-top: 2rem;">
+            <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a> |
+        E-mail: ubik DOT 3141 AT gmail DOT com
+    </footer>
+</body>
+</html>

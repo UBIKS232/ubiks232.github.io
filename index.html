@@ -80,6 +80,16 @@
         
             
             <article>
+                <h3><a href="/posts/ulupa-2.6-cp/">ULUPA-2.6-cp</a></h3>
+                <time datetime="2026-01-07T13:35:35&#43;08:00">
+                    2026-1-7
+                </time>
+                <p>Understanding Linux/Unix Programming A Guide 2 Theory And Practice
+简单的cp实现起来很清楚: {创建新文件+打开旧文件}-&gt;使用缓存的字节数组读取旧文件-&gt;将读取的内容写入新文件-&gt;{关闭新文件+关闭旧文件}.
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52  #include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;unistd.h&gt;#include &lt;fcntl.h&gt; #define BUFFERSIZE 4096 #define COPYMODE 0644  void oops(int pos, char *err); int main(int argc, char *argv[]) { int old_fd, new_fd, n_char; char buf[BUFFERSIZE]; // if(argc !</p>
+            </article>
+            
+            <article>
                 <h3><a href="/posts/ulupa-2.5-who/">ULUPA-2.5-who</a></h3>
                 <time datetime="2026-01-06T20:59:11&#43;08:00">
                     2026-1-6
