@@ -19,7 +19,7 @@
         </header>
 
         <div>
-            <p>环境: Windows11 + WSL2的Ubuntu22.04, 开启Windows对WSL2的镜像网络, 只要在WSL2的配置(.wslconfig)中加上:</p>
+            <p>环境: Windows11 + WSL2的Ubuntu22.04, 开启Windows对WSL2的镜像网络, 在WSL2的配置(.wslconfig)中加上:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -204,7 +204,7 @@ netmask:    255.255.255.0
 </ul>
 <p>可以将上面这段写入一个init.sh, 在完成Linux引导进入shell后手动执行.</p>
 <h4 id="验证方法">验证方法</h4>
-<p><img src="zynq-nfs-wsl.png" alt="alt text"></p>
+<p><img src="/images/zynq-nfs-wsl.png" alt="alt text"></p>
 <hr>
 <h3 id="总结">总结</h3>
 <p>该问题的根本原因不是“网络不通”或“Linux 防火墙”, 而是 <strong>WSL2 在 Windows 下对高端口入站连接的默认丢弃行为</strong>. 唯一可靠解法是：</p>

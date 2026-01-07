@@ -90,7 +90,7 @@
                 <time datetime="2026-01-07T18:21:39&#43;08:00">
                     2026-1-7
                 </time>
-                <p>环境: Windows11 + WSL2的Ubuntu22.04, 开启Windows对WSL2的镜像网络, 只要在WSL2的配置(.wslconfig)中加上:
+                <p>环境: Windows11 + WSL2的Ubuntu22.04, 开启Windows对WSL2的镜像网络, 在WSL2的配置(.wslconfig)中加上:
 1 2  [wsl2] networkingMode=mirrored    1 Windows防火墙的入站许可-1(后面还要设置Windows的防火墙) 按照(Windows11下)Control Panel -&gt; System and Security -&gt; Windows Denfender Firewall -&gt; Advanced Settings -&gt; Inbound Rules -&gt; 找到: File and Printer Sharing (Echo Request - ICMPv4-In), 然后右键点击Enable Rule, 这样允许zynq uboot通过以太网ping主机.
  2 配置以太网连接 由于开启了镜像网络, 因此WSL2上的虚拟机与Windows共享同一个网卡, 只需要将Windows的以太网设置好就行了.
 比如我将Windows的eth设置成:
