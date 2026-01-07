@@ -33,7 +33,10 @@
                     
                     
                 
-                <a href="/categories/init/">init</a> <a href="/categories/rt-thread/">rt-thread</a> <a href="/categories/rtfsc/">rtfsc</a> <a href="/categories/ulupa/">ulupa</a> <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a>
+                    
+                    
+                
+                <a href="/categories/embedded-linux/">embedded-linux</a> <a href="/categories/init/">init</a> <a href="/categories/rt-thread/">rt-thread</a> <a href="/categories/rtfsc/">rtfsc</a> <a href="/categories/ulupa/">ulupa</a> <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a>
             </div>
             
 
@@ -69,7 +72,10 @@
                     
                     
                 
-                <a href="/tags/c/">c</a> <a href="/tags/embedded/">embedded</a> <a href="/tags/git/">git</a> <a href="/tags/init/">init</a> <a href="/tags/linux/">linux</a> <a href="/tags/os/">os</a> <a href="/tags/read-a-book/">read-a-book</a> <a href="/tags/rtos/">rtos</a> <a href="/tags/strange-bug/">strange-bug</a>
+                    
+                    
+                
+                <a href="/tags/c/">c</a> <a href="/tags/embedded/">embedded</a> <a href="/tags/git/">git</a> <a href="/tags/init/">init</a> <a href="/tags/linux/">linux</a> <a href="/tags/os/">os</a> <a href="/tags/read-a-book/">read-a-book</a> <a href="/tags/rtos/">rtos</a> <a href="/tags/strange-bug/">strange-bug</a> <a href="/tags/zynq/">zynq</a>
             </div>
             
         </div>
@@ -78,6 +84,18 @@
 
         <h2>Recent Articles</h2>
         
+            
+            <article>
+                <h3><a href="/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bntfs/">Zynq-Linux-1-建立ntfs</a></h3>
+                <time datetime="2026-01-07T18:21:39&#43;08:00">
+                    2026-1-7
+                </time>
+                <p>环境: Windows11 + WSL2的Ubuntu22.04, 开启Windows对WSL2的镜像网络, 只要在WSL2的配置(.wslconfig)中加上:
+1 2  [wsl2] networkingMode=mirrored    1 Windows防火墙的入站许可-1(后面还要设置Windows的防火墙) 按照(Windows11下)Control Panel -&gt; System and Security -&gt; Windows Denfender Firewall -&gt; Advanced Settings -&gt; Inbound Rules -&gt; 找到: File and Printer Sharing (Echo Request - ICMPv4-In), 然后右键点击Enable Rule, 这样允许zynq uboot通过以太网ping主机.
+ 2 配置以太网连接 由于开启了镜像网络, 因此WSL2上的虚拟机与Windows共享同一个网卡, 只需要将Windows的以太网设置好就行了.
+比如我将Windows的eth设置成:
+1 2  ipv4 addr: 192.168.2.10 netmask: 255.255.255.0   暂时先不设置网关, DNS, IPv6等内容. 在启动zynq上的Linux之前, 先中断系统引导停留在uboot阶段, 使用setenv配置网络, 将地址写为同一网段的地址.</p>
+            </article>
             
             <article>
                 <h3><a href="/posts/ulupa-2.6-cp/">ULUPA-2.6-cp</a></h3>

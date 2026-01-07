@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Zynq-Linux-1-建立ntfs | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chroma.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Zynq-Linux-1-建立ntfs</h1>
+            <p>
+                <time datetime="2026-01-07T18:21:39&#43;08:00">
+                    2026-1-7
+                </time>
+            </p>
+        </header>
+
+        <div>
+            <p>环境: Windows11 + WSL2的Ubuntu22.04, 开启Windows对WSL2的镜像网络, 只要在WSL2的配置(.wslconfig)中加上:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="o">[</span>wsl2<span class="o">]</span>
+<span class="nv">networkingMode</span><span class="o">=</span>mirrored
+</code></pre></td></tr></table>
+</div>
+</div><hr>
+<h2 id="1-windows防火墙的入站许可-1后面还要设置windows的防火墙">1 Windows防火墙的入站许可-1(后面还要设置Windows的防火墙)</h2>
+<p>按照(Windows11下)Control Panel -&gt; System and Security -&gt; Windows Denfender Firewall -&gt; Advanced Settings -&gt; Inbound Rules -&gt; 找到: File and Printer Sharing (Echo Request - ICMPv4-In), 然后右键点击Enable Rule, 这样允许zynq uboot通过以太网ping主机.</p>
+<hr>
+<h2 id="2-配置以太网连接">2 配置以太网连接</h2>
+<p>由于开启了镜像网络, 因此WSL2上的虚拟机与Windows共享同一个网卡, 只需要将Windows的以太网设置好就行了.</p>
+<p>比如我将Windows的eth设置成:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ipv4 addr:  192.168.2.10
+netmask:    255.255.255.0
+</code></pre></td></tr></table>
+</div>
+</div><p>暂时先不设置网关, DNS, IPv6等内容. 在启动zynq上的Linux之前, 先中断系统引导停留在uboot阶段, 使用<code>setenv</code>配置网络, 将地址写为同一网段的地址.</p>
+<p>使用<code>ping</code>测试与上位机Windows的连接, 看到&quot;&hellip;is <strong>alive</strong>&quot;, 就成功了.</p>
+<p>这里可以选择使用uboot的bootargs将网络参数传入所引导的Linux, 但是我这里好像不起作用, 因此后面我是手动配置Linux的网络的.</p>
+<hr>
+<h2 id="3-zynq端linux与wsl2使用nfs共享文件">3 Zynq端Linux与WSL2使用NFS共享文件</h2>
+<h3 id="i-先设置开发板网络aigc-by-qwen3-edited-by-me">I. 先设置开发板网络(AIGC by Qwen3, edited by me)</h3>
+<p>使用SysV init脚本, 创建文件并编辑: <code>vi /etc/init.d/S99static-ip</code>(在嵌入式 Linux 中, /etc/init.d/下以S开头的脚本会在启动时按数字顺序执行, S99表示最后阶段运行):</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="cp">#!/bin/sh
+</span><span class="cp"></span>
+<span class="k">case</span> <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> in
+  start<span class="o">)</span>
+    <span class="nb">echo</span> <span class="s2">&#34;Setting static IP for eth0...&#34;</span>
+    /sbin/ip addr add 192.168.2.99/24 dev eth0
+    /sbin/ip link <span class="nb">set</span> eth0 up
+    <span class="p">;;</span>
+  stop<span class="o">)</span>
+    <span class="nb">echo</span> <span class="s2">&#34;Removing static IP from eth0...&#34;</span>
+    /sbin/ip addr del 192.168.2.99/24 dev eth0 2&gt;/dev/null <span class="o">||</span> <span class="nb">true</span>
+    <span class="p">;;</span>
+  *<span class="o">)</span>
+    <span class="nb">echo</span> <span class="s2">&#34;Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop}&#34;</span>
+    <span class="nb">exit</span> <span class="m">1</span>
+    <span class="p">;;</span>
+<span class="k">esac</span>
+
+<span class="nb">exit</span> <span class="m">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>赋予执行权限<code>chmod +x /etc/init.d/S99static-ip</code>, 检查<code>ls /etc/rcS.d/</code>是否有类似<code>S99static-ip -&gt; ../init.d/S99static-ip</code>的软链接, 若无, 则创建软链接<code>ln -s /etc/init.d/S99static-ip /etc/rcS.d/S99static-ip</code></p>
+<p>使用<code>/etc/init.d/S99static-ip start</code>应用脚本, 查看<code>ip addr show eth0</code>, 然后测试<code>ping 192.168.2.10</code>, 此时网络应该已经正确配置并且能够开机自运行.</p>
+<h3 id="ii-建立ntfs共享目录aigc-by-qwen3-edited-by-me">II. 建立NTFS共享目录(AIGC by Qwen3, edited by me)</h3>
+<p>在WSL2(Ubuntu22.04)上搭建NFS服务器供Zynq挂载会遇到挂载卡死的问题, 表现为开发板执行 <code>mount</code> 命令后无响应、不报错、也无法中断, 而网络基础连通性(如 ping、telnet 2049)正常.</p>
+<h4 id="问题本质">问题本质</h4>
+<p>NFSv3 协议依赖多个辅助服务(如 <code>mountd</code>、<code>statd</code>、<code>lockd</code>), 这些服务默认监听在<strong>高端动态端口</strong>(如 48411). 虽然在 WSL 中通过 <code>rpcinfo -p</code> 能看到这些端口注册成功, 但 <strong>WSL2 使用的是“镜像网络”(mirrored networking)模式</strong>, 其底层由 Windows Hyper-V 实现. 微软官方文档明确指出：</p>
+<blockquote>
+<p>“入站连接到 WSL2 监听的非标准端口(&gt;1024)会被 Windows 网络栈静默丢弃, 除非在 Windows 防火墙中显式放行. ”</p>
+</blockquote>
+<p>这意味着, 即使关闭了 Windows Defender 防火墙, <strong>系统内核层仍会丢弃未授权的入站 TCP 包</strong>. 开发板可以连接到 2049(NFS 主端口), 但在后续向 <code>mountd</code>(如 20048)发起 RPC 请求时被丢包, 导致挂载流程卡死.</p>
+<h4 id="解决方案固定端口--windows-防火墙放行">解决方案：固定端口 + Windows 防火墙放行</h4>
+<h5 id="a-在-wsl2-中固定所有-nfs-相关服务端口">a. 在 WSL2 中固定所有 NFS 相关服务端口</h5>
+<p>编辑 <code>/etc/nfs.conf</code>(Ubuntu 22.04+)：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="k">[nfsd]</span>
+<span class="na">tcp</span><span class="o">=</span><span class="s">y</span>
+<span class="na">udp</span><span class="o">=</span><span class="s">n</span>
+
+<span class="k">[mountd]</span>
+<span class="na">port</span><span class="o">=</span><span class="s">20048</span>
+
+<span class="k">[statd]</span>
+<span class="na">port</span><span class="o">=</span><span class="s">20050</span>
+<span class="na">outgoing-port</span><span class="o">=</span><span class="s">20051</span>
+
+<span class="k">[lockd]</span>
+<span class="na">port</span><span class="o">=</span><span class="s">20052</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>对于旧版系统, 可创建 <code>/etc/modprobe.d/lockd.conf</code>：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">options lockd nlm_tcpport=20052 nlm_udpport=20052
+</code></pre><p>并配置 <code>nfs-mountd</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s1">&#39;OPTIONS=&#34;-p 20048&#34;&#39;</span> <span class="p">|</span> sudo tee /etc/default/nfs-mountd
+</code></pre></td></tr></table>
+</div>
+</div><p>重启服务：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo systemctl restart rpcbind nfs-server rpc-statd
+</code></pre></td></tr></table>
+</div>
+</div><p>验证端口是否固定：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo rpcinfo -p localhost
+</code></pre></td></tr></table>
+</div>
+</div><p>应看到 <code>mountd</code> → 20048, <code>status</code> → 20050, <code>nlockmgr</code> → 20052.</p>
+<h5 id="b-在-windows-中放行对应-tcp-端口">b. 在 Windows 中放行对应 TCP 端口</h5>
+<p>以管理员身份运行 PowerShell：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nv">$ports</span> <span class="p">=</span> <span class="p">@(</span><span class="n">111</span><span class="p">,</span> <span class="n">2049</span><span class="p">,</span> <span class="n">20048</span><span class="p">,</span> <span class="n">20050</span><span class="p">,</span> <span class="n">20052</span><span class="p">)</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$port</span> <span class="k">in</span> <span class="nv">$ports</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">New-NetFirewallRule</span> <span class="n">-DisplayName</span> <span class="s2">&#34;NFS-Fixed-Port-$port&#34;</span> <span class="n">-Direction</span> <span class="n">Inbound</span> <span class="n">-Protocol</span> <span class="n">TCP</span> <span class="n">-LocalPort</span> <span class="nv">$port</span> <span class="n">-Action</span> <span class="n">Allow</span> <span class="n">-Profile</span> <span class="n">Any</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="c-开发板挂载时添加超时与无锁选项">c. 开发板挂载时添加超时与无锁选项</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mount -t nfs -o nolock,vers<span class="o">=</span>3,proto<span class="o">=</span>tcp,timeo<span class="o">=</span>100,retrans<span class="o">=</span>2,noac,lookupcache<span class="o">=</span>none 192.168.2.10:/home/ubiks/proj/zynq/nfs /home/root/nfs
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>timeo=100</code>(10秒超时)和 <code>retrans=2</code> 避免无限卡死；</li>
+<li><code>nolock,noac,lookupcache=none</code> 最大程度绕过对 <code>lockd/statd</code> 的依赖.</li>
+</ul>
+<p>可以将上面这段写入一个init.sh, 在完成Linux引导进入shell后手动执行.</p>
+<h4 id="验证方法">验证方法</h4>
+<p><img src="zynq-nfs-wsl.png" alt="alt text"></p>
+<hr>
+<h3 id="总结">总结</h3>
+<p>该问题的根本原因不是“网络不通”或“Linux 防火墙”, 而是 <strong>WSL2 在 Windows 下对高端口入站连接的默认丢弃行为</strong>. 唯一可靠解法是：</p>
+<ul>
+<li><strong>强制 NFS 使用固定低端口</strong></li>
+<li><strong>在 Windows 防火墙中显式放行这些端口</strong></li>
+<li><strong>客户端挂载时禁用锁机制并设置超时</strong></li>
+</ul>
+
+        </div>
+
+        <p style="margin-top: 2rem;">
+            <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a> |
+        E-mail: ubik DOT 3141 AT gmail DOT com
+    </footer>
+</body>
+</html>

@@ -2,38 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://ubiks232.github.io/tags/c/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
     <loc>https://ubiks232.github.io/categories/</loc>
-    <lastmod>2026-01-07T13:35:35+08:00</lastmod>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/tags/embedded/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/categories/embedded-linux/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/tags/init/</loc>
-    <lastmod>2026-01-07T13:35:35+08:00</lastmod>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/categories/init/</loc>
-    <lastmod>2026-01-07T13:35:35+08:00</lastmod>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/tags/linux/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/posts/</loc>
-    <lastmod>2026-01-07T13:35:35+08:00</lastmod>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/tags/strange-bug/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/tags/</loc>
-    <lastmod>2026-01-07T13:35:35+08:00</lastmod>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/tags/zynq/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bntfs/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
+    <lastmod>2026-01-07T18:21:39+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/tags/read-a-book/</loc>
+    <lastmod>2026-01-07T13:35:35+08:00</lastmod>
+  </url><url>
+    <loc>https://ubiks232.github.io/categories/ulupa/</loc>
     <lastmod>2026-01-07T13:35:35+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/posts/ulupa-2.6-cp/</loc>
     <lastmod>2026-01-07T13:35:35+08:00</lastmod>
-  </url><url>
-    <loc>https://ubiks232.github.io/tags/c/</loc>
-    <lastmod>2026-01-06T20:59:11+08:00</lastmod>
-  </url><url>
-    <loc>https://ubiks232.github.io/tags/linux/</loc>
-    <lastmod>2026-01-06T20:59:11+08:00</lastmod>
-  </url><url>
-    <loc>https://ubiks232.github.io/tags/read-a-book/</loc>
-    <lastmod>2026-01-06T20:59:11+08:00</lastmod>
-  </url><url>
-    <loc>https://ubiks232.github.io/categories/ulupa/</loc>
-    <lastmod>2026-01-06T20:59:11+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/posts/ulupa-2.5-who/</loc>
     <lastmod>2026-01-06T20:59:11+08:00</lastmod>
@@ -41,17 +59,8 @@
     <loc>https://ubiks232.github.io/tags/git/</loc>
     <lastmod>2026-01-04T23:31:56+08:00</lastmod>
   </url><url>
-    <loc>https://ubiks232.github.io/tags/strange-bug/</loc>
-    <lastmod>2026-01-04T23:31:56+08:00</lastmod>
-  </url><url>
     <loc>https://ubiks232.github.io/posts/windows%E4%B8%8Bgit-push%E6%98%BE%E7%A4%BApermission-denied%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E4%B8%8E%E8%A7%A3%E5%86%B3/</loc>
     <lastmod>2026-01-04T23:31:56+08:00</lastmod>
-  </url><url>
-    <loc>https://ubiks232.github.io/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
-    <lastmod>2026-01-04T23:31:56+08:00</lastmod>
-  </url><url>
-    <loc>https://ubiks232.github.io/tags/embedded/</loc>
-    <lastmod>2026-01-04T18:22:21+08:00</lastmod>
   </url><url>
     <loc>https://ubiks232.github.io/tags/os/</loc>
     <lastmod>2026-01-04T18:22:21+08:00</lastmod>

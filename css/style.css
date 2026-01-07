@@ -17,7 +17,7 @@ html, body {
 
 /* 主容器：固定宽度 1000px，居中 */
 .container {
-    width: 1000px;
+    width: 1450px;
     margin: 18px auto;
     padding: 0 18px; /* 避免内容贴边 */
 }
