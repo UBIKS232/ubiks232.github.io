@@ -8,11 +8,11 @@
     <language>zh-CN</language>
     <lastBuildDate>Wed, 07 Jan 2026 18:21:39 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Zynq-Linux-1-建立ntfs</title>
-      <link>https://ubiks232.github.io/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bntfs/</link>
+      <title>Zynq-Linux-1-建立nfs</title>
+      <link>https://ubiks232.github.io/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bnfs/</link>
       <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
       
-      <guid>https://ubiks232.github.io/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bntfs/</guid>
+      <guid>https://ubiks232.github.io/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bnfs/</guid>
       <description>环境: Windows11 + WSL2的Ubuntu22.04, 开启Windows对WSL2的镜像网络, 只要在WSL2的配置(.wslconfig)中加上:
 1 2  [wsl2] networkingMode=mirrored    1 Windows防火墙的入站许可-1(后面还要设置Windows的防火墙) 按照(Windows11下)Control Panel -&amp;gt; System and Security -&amp;gt; Windows Denfender Firewall -&amp;gt; Advanced Settings -&amp;gt; Inbound Rules -&amp;gt; 找到: File and Printer Sharing (Echo Request - ICMPv4-In), 然后右键点击Enable Rule, 这样允许zynq uboot通过以太网ping主机.
  2 配置以太网连接 由于开启了镜像网络, 因此WSL2上的虚拟机与Windows共享同一个网卡, 只需要将Windows的以太网设置好就行了.
