@@ -6,22 +6,31 @@
     <description>Recent content in Categories on ubiks232&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 07 Jan 2026 18:21:39 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Jan 2026 00:32:21 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>init</title>
+      <link>https://ubiks232.github.io/categories/init/</link>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
+      
+      <guid>https://ubiks232.github.io/categories/init/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>stm32平衡车</title>
+      <link>https://ubiks232.github.io/categories/stm32%E5%B9%B3%E8%A1%A1%E8%BD%A6/</link>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
+      
+      <guid>https://ubiks232.github.io/categories/stm32%E5%B9%B3%E8%A1%A1%E8%BD%A6/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Embedded-Linux</title>
       <link>https://ubiks232.github.io/categories/embedded-linux/</link>
       <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
       
       <guid>https://ubiks232.github.io/categories/embedded-linux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>init</title>
-      <link>https://ubiks232.github.io/categories/init/</link>
-      <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
-      
-      <guid>https://ubiks232.github.io/categories/init/</guid>
       <description></description>
     </item>
     

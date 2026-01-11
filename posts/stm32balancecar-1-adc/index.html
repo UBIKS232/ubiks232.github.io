@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STM32 Balance Car 1 ADC | ubiks232&#39;s blog</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/chroma.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>STM32 Balance Car 1 ADC</h1>
+            <p>
+                <time datetime="2026-01-12T00:32:21&#43;08:00">
+                    2026-1-12
+                </time>
+            </p>
+        </header>
+
+        <div>
+            <p><a href="https://www.bilibili.com/video/BV1wdqhY4E3R/?spm_id_from=333.1387.homepage.video_card.click">铁头山羊的教程</a></p>
+<h2 id="adc相关bug">adc相关bug</h2>
+<p>测试时遇到<code>Delay()</code>函数不能正确执行的bug, 有如下几个排查方向:</p>
+<ol>
+<li><code>Delay()</code>是否被编译器优化?</li>
+<li>该函数内部的变量更新是由<code>__weak Systick_Handler()</code>实现的, 这个中断处理是否能正常执行?</li>
+</ol>
+<h3 id="1">1</h3>
+<p>在Keil5调试界面的汇编代码对照中, 能够看到:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="w">    </span><span class="mi">22</span>:         <span class="nc">Delay</span><span class="p">(</span><span class="mi">1000</span><span class="p">);</span><span class="w"> 
+</span><span class="w"></span><span class="mh">0x08001BB6</span><span class="w"> </span><span class="n">F44F707A</span><span class="w">  </span><span class="n">MOV</span><span class="w">      </span><span class="n">r0</span><span class="p">,</span>#<span class="mh">0x3E8</span><span class="w">
+</span><span class="w"></span><span class="mh">0x08001BBA</span><span class="w"> </span><span class="n">F7FEFED7</span><span class="w">  </span><span class="n">BL</span><span class="p">.</span><span class="n">W</span><span class="w">     </span><span class="mh">0x0800096C</span><span class="w"> </span><span class="n">Delay</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>说明<code>Delay()</code>能被正确编译, 没有被优化.</p>
+<h3 id="2">2</h3>
+<p>在进入<code>Delay()</code>之后, 出现了突然跳到<code>ADC1_2_IRAHandler</code>的情况, 这个<code>ADC1_2_IRAHandler</code>被我用于处理ADC1转换得到的数据, 并且在调试卡死一段时间后, 又回到了<code>Delay()</code>中继续执行, 似乎并不能正确进入<code>Systick_Handler()</code>.</p>
+<p>此时我产生了两个怀疑: 1, <code>Systick_Handler()</code>是不是被优化掉了; 2, <code>ADC1_2_IRQHandler</code>似乎抢占了<code>Systick_Handler()</code>的执行.</p>
+<p>首先看1, 在<strong>stm32f10x_it.c</strong>中查看<code>Systick_Handler()</code>的实现:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">extern</span> <span class="n">__IO</span> <span class="kt">uint32_t</span> <span class="n">ulTicks</span><span class="p">;</span>
+
+<span class="kt">void</span> <span class="nf">SysTick_Handler</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">SysTick</span><span class="o">-&gt;</span><span class="n">CTRL</span> <span class="o">&amp;</span> <span class="n">SysTick_CTRL_COUNTFLAG</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">ulTicks</span><span class="o">++</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>先声明了外部变量<code>ulTicks</code>, 然后根据ST公司提供的<strong>TM0056</strong>中的&quot;Bit 16 COUNTFLAG:
+Returns 1 if timer counted to 0 since last time this was read.&quot;, 使用<code>SysTick_CTRL_COUNTFLAG</code>作为掩码取<code>SysTick-&gt;CTRL</code>中的<code>COUNTFLAG</code>, 若满足该位为1, 则进行<code>ulTicks</code>自增, 否则跳过, 注意, <code>COUNTFLAG</code>位在读取之后会自动清零, 准备为下一次计数结束进行标记.</p>
+<p>这个实现看起来很对. 😎</p>
+<p>再看猜想2. <code>ADC1_2_IRQHandler</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/**
+</span><span class="cm"> * @brief ADC1中断响应函数, 读取ADC1在JEOC标志位置位中断发生后JDR1内的值
+</span><span class="cm"> */</span>
+<span class="kt">void</span> <span class="nf">ADC1_2_IRQHandler</span><span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="n">ADC_GetFlagStatus</span><span class="p">(</span><span class="n">ADC1</span><span class="p">,</span> <span class="n">ADC_FLAG_JEOC</span><span class="p">)</span> <span class="o">==</span> <span class="n">SET</span><span class="p">){</span>
+        <span class="kt">uint16_t</span> <span class="n">jdr1</span> <span class="o">=</span> <span class="n">ADC_GetInjectedConversionValue</span><span class="p">(</span><span class="n">ADC1</span><span class="p">,</span> <span class="n">ADC_InjectedChannel_1</span><span class="p">);</span>
+        <span class="n">vbat</span> <span class="o">=</span> <span class="n">jdr1</span> <span class="o">*</span> <span class="mf">2.0513e-3</span><span class="p">;</span> <span class="c1">// 3.3 * (8.4f / 3.3f) / 4095.0f = 2.0513e-3
+</span><span class="c1"></span>    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这里有个严重的错误, <strong>在获取<code>JEOC</code>置位的消息之后, 没有对这个标志位清零!</strong> 这会导致<code>JEOC</code>置位之后, 反复进入这个中断&hellip; 应该加一句<code>ADC_ClearFlag(ADC1, ADC_FLAG_JEOC);</code>!!!</p>
+<h3 id="问题解决">问题解决</h3>
+<p>从一开始Delay不能正常执行到最后ADC的标志位没有清零, 这中间我排查了好长时间😭, 以后见到中断异常执行, 就应该先想到标志位的问题!</p>
+
+        </div>
+
+        <p style="margin-top: 2rem;">
+            <a href="https://ubiks232.github.io/" style="color: #002aff; text-decoration: underline;">←Home</a>
+        </p>
+    </div>
+
+    <footer class="site-footer">
+        Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> |
+        Website by <a href="https://github.com/UBIKS232" target="_blank" rel="noopener">ubiks232</a> |
+        E-mail: ubik DOT 3141 AT gmail DOT com
+    </footer>
+</body>
+</html>

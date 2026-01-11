@@ -36,7 +36,10 @@
                     
                     
                 
-                <a href="/categories/embedded-linux/">embedded-linux</a> <a href="/categories/init/">init</a> <a href="/categories/rt-thread/">rt-thread</a> <a href="/categories/rtfsc/">rtfsc</a> <a href="/categories/ulupa/">ulupa</a> <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a>
+                    
+                    
+                
+                <a href="/categories/embedded-linux/">embedded-linux</a> <a href="/categories/init/">init</a> <a href="/categories/rt-thread/">rt-thread</a> <a href="/categories/rtfsc/">rtfsc</a> <a href="/categories/stm32%E5%B9%B3%E8%A1%A1%E8%BD%A6/">stm32平衡车</a> <a href="/categories/ulupa/">ulupa</a> <a href="/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">环境搭建</a>
             </div>
             
 
@@ -75,7 +78,10 @@
                     
                     
                 
-                <a href="/tags/c/">c</a> <a href="/tags/embedded/">embedded</a> <a href="/tags/git/">git</a> <a href="/tags/init/">init</a> <a href="/tags/linux/">linux</a> <a href="/tags/os/">os</a> <a href="/tags/read-a-book/">read-a-book</a> <a href="/tags/rtos/">rtos</a> <a href="/tags/strange-bug/">strange-bug</a> <a href="/tags/zynq/">zynq</a>
+                    
+                    
+                
+                <a href="/tags/c/">c</a> <a href="/tags/embedded/">embedded</a> <a href="/tags/git/">git</a> <a href="/tags/init/">init</a> <a href="/tags/linux/">linux</a> <a href="/tags/os/">os</a> <a href="/tags/read-a-book/">read-a-book</a> <a href="/tags/rtos/">rtos</a> <a href="/tags/stm32/">stm32</a> <a href="/tags/strange-bug/">strange-bug</a> <a href="/tags/zynq/">zynq</a>
             </div>
             
         </div>
@@ -86,7 +92,22 @@
         
             
             <article>
-                <h3><a href="/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bnfs/">Zynq-Linux-1-建立nfs</a></h3>
+                <h3><a href="/posts/stm32balancecar-1-adc/">STM32 Balance Car 1 ADC</a></h3>
+                <time datetime="2026-01-12T00:32:21&#43;08:00">
+                    2026-1-12
+                </time>
+                <p>铁头山羊的教程
+adc相关bug 测试时遇到Delay()函数不能正确执行的bug, 有如下几个排查方向:
+ Delay()是否被编译器优化? 该函数内部的变量更新是由__weak Systick_Handler()实现的, 这个中断处理是否能正常执行?  1 在Keil5调试界面的汇编代码对照中, 能够看到:
+1 2 3  22: Delay(1000);0x08001BB6F44F707AMOVr0,#0x3E80x08001BBAF7FEFED7BL.W0x0800096CDelay  说明Delay()能被正确编译, 没有被优化.
+2 在进入Delay()之后, 出现了突然跳到ADC1_2_IRAHandler的情况, 这个ADC1_2_IRAHandler被我用于处理ADC1转换得到的数据, 并且在调试卡死一段时间后, 又回到了Delay()中继续执行, 似乎并不能正确进入Systick_Handler().
+此时我产生了两个怀疑: 1, Systick_Handler()是不是被优化掉了; 2, ADC1_2_IRQHandler似乎抢占了Systick_Handler()的执行.
+首先看1, 在stm32f10x_it.c中查看Systick_Handler()的实现:
+1 2 3 4 5 6 7 8 9  extern __IO uint32_t ulTicks; void SysTick_Handler(void) { if (SysTick-&gt;CTRL &amp; SysTick_CTRL_COUNTFLAG) { ulTicks++; } }   先声明了外部变量ulTicks, 然后根据ST公司提供的TM0056中的&quot;Bit 16 COUNTFLAG: Returns 1 if timer counted to 0 since last time this was read.</p>
+            </article>
+            
+            <article>
+                <h3><a href="/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bnfs/">Zynq Linux 1 建立nfs</a></h3>
                 <time datetime="2026-01-07T18:21:39&#43;08:00">
                     2026-1-7
                 </time>

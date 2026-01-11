@@ -6,9 +6,25 @@
     <description>Recent content on ubiks232&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 07 Jan 2026 18:21:39 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Jan 2026 00:32:21 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Zynq-Linux-1-建立nfs</title>
+      <title>STM32 Balance Car 1 ADC</title>
+      <link>https://ubiks232.github.io/posts/stm32balancecar-1-adc/</link>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
+      
+      <guid>https://ubiks232.github.io/posts/stm32balancecar-1-adc/</guid>
+      <description>铁头山羊的教程
+adc相关bug 测试时遇到Delay()函数不能正确执行的bug, 有如下几个排查方向:
+ Delay()是否被编译器优化? 该函数内部的变量更新是由__weak Systick_Handler()实现的, 这个中断处理是否能正常执行?  1 在Keil5调试界面的汇编代码对照中, 能够看到:
+1 2 3  22: Delay(1000);0x08001BB6F44F707AMOVr0,#0x3E80x08001BBAF7FEFED7BL.W0x0800096CDelay  说明Delay()能被正确编译, 没有被优化.
+2 在进入Delay()之后, 出现了突然跳到ADC1_2_IRAHandler的情况, 这个ADC1_2_IRAHandler被我用于处理ADC1转换得到的数据, 并且在调试卡死一段时间后, 又回到了Delay()中继续执行, 似乎并不能正确进入Systick_Handler().
+此时我产生了两个怀疑: 1, Systick_Handler()是不是被优化掉了; 2, ADC1_2_IRQHandler似乎抢占了Systick_Handler()的执行.
+首先看1, 在stm32f10x_it.c中查看Systick_Handler()的实现:
+1 2 3 4 5 6 7 8 9  extern __IO uint32_t ulTicks; void SysTick_Handler(void) { if (SysTick-&amp;gt;CTRL &amp;amp; SysTick_CTRL_COUNTFLAG) { ulTicks++; } }   先声明了外部变量ulTicks, 然后根据ST公司提供的TM0056中的&amp;quot;Bit 16 COUNTFLAG: Returns 1 if timer counted to 0 since last time this was read.</description>
+    </item>
+    
+    <item>
+      <title>Zynq Linux 1 建立nfs</title>
       <link>https://ubiks232.github.io/posts/zynq-linux-1-%E5%BB%BA%E7%AB%8Bnfs/</link>
       <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
       

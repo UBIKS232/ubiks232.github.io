@@ -6,11 +6,11 @@
     <description>Recent content in Tags on ubiks232&#39;s blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Wed, 07 Jan 2026 18:21:39 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 12 Jan 2026 00:32:21 +0800</lastBuildDate><atom:link href="https://ubiks232.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>c</title>
       <link>https://ubiks232.github.io/tags/c/</link>
-      <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
       
       <guid>https://ubiks232.github.io/tags/c/</guid>
       <description></description>
@@ -19,7 +19,7 @@
     <item>
       <title>embedded</title>
       <link>https://ubiks232.github.io/tags/embedded/</link>
-      <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
       
       <guid>https://ubiks232.github.io/tags/embedded/</guid>
       <description></description>
@@ -28,9 +28,27 @@
     <item>
       <title>init</title>
       <link>https://ubiks232.github.io/tags/init/</link>
-      <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
       
       <guid>https://ubiks232.github.io/tags/init/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>stm32</title>
+      <link>https://ubiks232.github.io/tags/stm32/</link>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
+      
+      <guid>https://ubiks232.github.io/tags/stm32/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>strange-bug</title>
+      <link>https://ubiks232.github.io/tags/strange-bug/</link>
+      <pubDate>Mon, 12 Jan 2026 00:32:21 +0800</pubDate>
+      
+      <guid>https://ubiks232.github.io/tags/strange-bug/</guid>
       <description></description>
     </item>
     
@@ -40,15 +58,6 @@
       <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
       
       <guid>https://ubiks232.github.io/tags/linux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>strange-bug</title>
-      <link>https://ubiks232.github.io/tags/strange-bug/</link>
-      <pubDate>Wed, 07 Jan 2026 18:21:39 +0800</pubDate>
-      
-      <guid>https://ubiks232.github.io/tags/strange-bug/</guid>
       <description></description>
     </item>
     
